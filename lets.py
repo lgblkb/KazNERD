@@ -55,7 +55,7 @@ def build(tag: str = typer.Option(f"{project_folder.name.lower()}:latest", '--ta
     dm['PROJECT_PATH'] = str(project_folder)
     cmd = f'docker image build ' \
           f'-t {tag} ' \
-          f'--build-arg CUDA_VERSION_TAG={dm[EnvKeys.NVIDIA_CUDA_TAG]} ' \
+          f'--build-arg NVIDIA_CUDA_TAG={dm[EnvKeys.NVIDIA_CUDA_TAG]} ' \
           f'--build-arg USER_ID={os.getuid()} ' \
           f'--build-arg GROUP_ID={os.getgid()} ' \
           f'--build-arg USERNAME={getpass.getuser()} ' \

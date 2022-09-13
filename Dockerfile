@@ -1,10 +1,10 @@
-ARG CUDA_VERSION_TAG
+ARG NVIDIA_CUDA_TAG
 # bring in the micromamba image so we can copy files from it
 FROM mambaorg/micromamba:0.25.1 as micromamba
 
 # This is the image we are going add micromaba to:
-ARG CUDA_CUDA_TAG
-FROM nvidia/cuda:${CUDA_CUDA_TAG} as base
+ARG NVIDIA_CUDA_TAG
+FROM nvidia/cuda:${NVIDIA_CUDA_TAG} as base
 
 ARG USERNAME
 ARG USER_ID

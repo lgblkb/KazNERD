@@ -55,7 +55,7 @@ def build(tag: str = typer.Option(f"{project_folder.name.lower()}:latest", '--ta
     dm['PROJECT_PATH'] = str(project_folder)
     cmd = f'docker image build ' \
           f'-t {tag} ' \
-          f'--build-arg CUDA_VERSION_TAG={dm[EnvKeys.CUDA_VERSION_TAG]} ' \
+          f'--build-arg CUDA_VERSION_TAG={dm[EnvKeys.CUDA_CUDA_TAG]} ' \
           f'--build-arg USER_ID={os.getuid()} ' \
           f'--build-arg GROUP_ID={os.getgid()} ' \
           f'--build-arg USERNAME={getpass.getuser()} ' \
@@ -116,12 +116,12 @@ def resolve_cuda_version():
 
 class EnvKeys(str, Enum):
     STORAGE_FOLDER = 'STORAGE_FOLDER'
-    CUDA_VERSION_TAG = 'CUDA_VERSION_TAG'
+    CUDA_CUDA_TAG = 'CUDA_CUDA_TAG'
 
 
 @app.command()
 def init(storage_folder: Path = typer.Option(Resolve(EnvKeys.STORAGE_FOLDER), '--storage-folder', prompt=True),
-         cuda_version: str = typer.Option(Resolve(EnvKeys.CUDA_VERSION_TAG), '--cuda-version', prompt=True)):
+         cuda_version: str = typer.Option(Resolve(EnvKeys.CUDA_CUDA_TAG), '--cuda-version', prompt=True)):
     storage_folder = storage_folder.resolve()
     storage_folder.mkdir(exist_ok=True, parents=True)
 
@@ -129,7 +129,7 @@ def init(storage_folder: Path = typer.Option(Resolve(EnvKeys.STORAGE_FOLDER), '-
         Path(path).touch(exist_ok=True)
 
     dm[EnvKeys.STORAGE_FOLDER] = str(storage_folder)
-    dm[EnvKeys.CUDA_VERSION_TAG] = cuda_version.strip()
+    dm[EnvKeys.CUDA_CUDA_TAG] = cuda_version.strip()
 
 
 if __name__ == "__main__":

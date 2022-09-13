@@ -3,8 +3,8 @@ ARG CUDA_VERSION_TAG
 FROM mambaorg/micromamba:0.25.1 as micromamba
 
 # This is the image we are going add micromaba to:
-ARG CUDA_VERSION_TAG
-FROM nvidia/cuda:${CUDA_VERSION_TAG}-devel-ubuntu22.04 as base
+ARG CUDA_CUDA_TAG
+FROM nvidia/cuda:${CUDA_CUDA_TAG} as base
 
 ARG USERNAME
 ARG USER_ID

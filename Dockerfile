@@ -54,9 +54,9 @@ ARG MAMBA_DOCKERFILE_ACTIVATE=1
 RUN micromamba create --name kaznerd python=3.8 -c conda-forge && \
     eval "$(micromamba shell hook --shell=bash)" &&\
     micromamba activate kaznerd &&\
-    micromamba install pytorch==1.7.1 torchvision==0.8.2 torchaudio==0.7.2 cudatoolkit=10.1 -c pytorch &&\
     micromamba install -c anaconda numpy &&\
     micromamba install -c conda-forge seqeval &&\
+    pip install torch==1.7.1+cu101 torchvision==0.8.2+cu101 torchaudio==0.7.2 -f https://download.pytorch.org/whl/torch_stable.html &&\
     pip install transformers &&\
     pip install datasets &&\
     micromamba clean --all --yes

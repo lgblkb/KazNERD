@@ -108,7 +108,7 @@ args = TrainingArguments(f"{model_name}-finetuned-{task}-{gpu}",
                             num_train_epochs=epochs,
                             warmup_steps=warmup_steps,
                             weight_decay=weight_decay,
-                            save_strategy="no",
+                            save_strategy="epoch",
                             seed=seed,
                             push_to_hub=False)
 

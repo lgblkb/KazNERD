@@ -1,0 +1,10 @@
+services:
+  app:
+    image: "${APP_IMAGE_NAME}"
+    volumes:
+      - '${PROJECT_PATH}:${PROJECT_PATH}'
+      - '${STORAGE_FOLDER}:${STORAGE_FOLDER}'
+    container_name: '${PROJECT_NAME}'
+    command: uvicorn app.main:app --reload --host 0.0.0.0
+    ports:
+      - "8369:8000"

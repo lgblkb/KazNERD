@@ -60,3 +60,9 @@ RUN micromamba create --name kaznerd python=3.8 -c conda-forge && \
     pip install transformers &&\
     pip install datasets &&\
     micromamba clean --all --yes
+
+ENV ENV_NAME='kaznerd'
+
+RUN eval "$(micromamba shell hook --shell=bash)" &&\
+    micromamba activate kaznerd &&\
+    pip install fastapi loguru python-dotenv uvicorn[standard]

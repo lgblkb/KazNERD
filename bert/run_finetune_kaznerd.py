@@ -1,8 +1,9 @@
 import os, sys
-os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID" 
-#gpu="0,1,2,3"
-gpu="0"
-os.environ["CUDA_VISIBLE_DEVICES"]=gpu
+
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+# gpu="0,1,2,3"
+gpu = "9,10,11,13,14"
+os.environ["CUDA_VISIBLE_DEVICES"] = gpu
 import numpy as np
 import seqeval.metrics
 from seqeval.scheme import IOB2
@@ -13,7 +14,7 @@ from datasets import load_dataset, load_metric
 
 if len(sys.argv) < 2 or sys.argv[1].lower() == 'bert':
     print("Using BERT model")
-    model_checkpoint = "bert-base-multilingual-cased" 
+    model_checkpoint = "bert-base-multilingual-cased"
     batch_size = 128
     learning_rate = 5e-5
     weight_decay = 0.0001
@@ -31,15 +32,15 @@ elif sys.argv[1].lower() == 'roberta':
     seed = 1
 else:
     print("Usage example:\n python run_finetune_kaznerd.py model (bert|roberta)\n"
-            "e.g.: python run_finetune_kaznerd.py roberta")
+          "e.g.: python run_finetune_kaznerd.py roberta")
     exit()
 
 
-#print(transformers.__version__)
+# print(transformers.__version__)
 
 def tokenize_and_align_labels(examples, tokenizer, task, label_all_tokens=False):
     tokenized_inputs = tokenizer(examples["tokens"], truncation=True,
-                        is_split_into_words=True)
+                                 is_split_into_words=True)
 
     labels = []
     for i, label in enumerate(examples[f"{task}_tags"]):
@@ -72,13 +73,13 @@ def compute_metrics(p):
 
     # Remove ignored index (special tokens)
     true_predictions = [[label_list[p] for (p, l) in zip(prediction, label) if l != -100]
-                            for prediction, label in zip(predictions, labels)]
-    true_labels = [[label_list[l] for (p, l) in zip(prediction, label) if l != -100]
                         for prediction, label in zip(predictions, labels)]
+    true_labels = [[label_list[l] for (p, l) in zip(prediction, label) if l != -100]
+                   for prediction, label in zip(predictions, labels)]
 
-    #computes micro average
+    # computes micro average
     results = metric.compute(predictions=true_predictions, references=true_labels,
-                scheme="IOB2", mode="strict")
+                             scheme="IOB2", mode="strict")
     return {"precision": results["overall_precision"],
             "recall": results["overall_recall"],
             "f1": results["overall_f1"],
@@ -89,7 +90,6 @@ task = "ner"
 datasets = load_dataset("kaznerd.py")
 label_list = datasets["train"].features[f"{task}_tags"].feature.names
 
-
 tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
 assert isinstance(tokenizer, transformers.PreTrainedTokenizerFast)
 data_collator = DataCollatorForTokenClassification(tokenizer)
@@ -97,25 +97,25 @@ data_collator = DataCollatorForTokenClassification(tokenizer)
 metric = load_metric("seqeval")
 
 model = AutoModelForTokenClassification.from_pretrained(model_checkpoint,
-            num_labels=len(label_list))
+                                                        num_labels=len(label_list))
 model_name = model_checkpoint.split("/")[-1]
 args = TrainingArguments(f"{model_name}-finetuned-{task}-{gpu}",
-                            overwrite_output_dir=True,
-                            evaluation_strategy="epoch",
-                            per_device_train_batch_size=batch_size,
-                            per_device_eval_batch_size=batch_size,
-                            learning_rate=learning_rate,
-                            num_train_epochs=epochs,
-                            warmup_steps=warmup_steps,
-                            weight_decay=weight_decay,
-                            save_strategy="epoch",
-                            seed=seed,
-                            push_to_hub=False)
+                         overwrite_output_dir=True,
+                         evaluation_strategy="epoch",
+                         per_device_train_batch_size=batch_size,
+                         per_device_eval_batch_size=batch_size,
+                         learning_rate=learning_rate,
+                         num_train_epochs=epochs,
+                         warmup_steps=warmup_steps,
+                         weight_decay=weight_decay,
+                         save_strategy="epoch",
+                         seed=seed,
+                         push_to_hub=False)
 
 tokenized_datasets = datasets.map(tokenize_and_align_labels, batched=True,
-        fn_kwargs={"tokenizer":tokenizer,"task":task})
+                                  fn_kwargs={"tokenizer": tokenizer, "task": task})
 
-trainer = Trainer(model, args, 
+trainer = Trainer(model, args,
                   data_collator=data_collator,
                   train_dataset=tokenized_datasets["train"],
                   eval_dataset=tokenized_datasets["validation"],
@@ -123,11 +123,11 @@ trainer = Trainer(model, args,
                   compute_metrics=compute_metrics)
 
 trainer.train()
-#trainer.evaluate()
+# trainer.evaluate()
 
 #################################################################################################
-#Evaluate validation set
-print("#"*100)
+# Evaluate validation set
+print("#" * 100)
 predictions, labels, _ = trainer.predict(tokenized_datasets["validation"])
 predictions = np.argmax(predictions, axis=2)
 
@@ -138,16 +138,16 @@ true_labels = [[label_list[l] for (p, l) in zip(prediction, label) if l != -100]
                for prediction, label in zip(predictions, labels)]
 
 results = metric.compute(predictions=true_predictions, references=true_labels, scheme="IOB2",
-            mode="strict")
+                         mode="strict")
 print("\nValidation: Overall F1", results["overall_f1"])
-print("Validation: Total number of sentences:",len(true_labels))
+print("Validation: Total number of sentences:", len(true_labels))
 print("Validation: Total number of tokens:", sum([len(sent) for sent in true_labels]))
 print("Validation: seqeval based results")
 print(seqeval.metrics.classification_report(true_labels, true_predictions, digits=4, mode='strict',
-    scheme=IOB2))
+                                            scheme=IOB2))
 #################################################################################################
-#Evaluate test set
-print("#"*100)
+# Evaluate test set
+print("#" * 100)
 predictions, labels, _ = trainer.predict(tokenized_datasets["test"])
 predictions = np.argmax(predictions, axis=2)
 
@@ -158,11 +158,11 @@ true_labels = [[label_list[l] for (p, l) in zip(prediction, label) if l != -100]
                for prediction, label in zip(predictions, labels)]
 
 results = metric.compute(predictions=true_predictions, references=true_labels, scheme="IOB2",
-            mode="strict")
+                         mode="strict")
 print("\nTest: Overall F1", results["overall_f1"])
-print("Test: Total number of sentences:",len(true_labels))
+print("Test: Total number of sentences:", len(true_labels))
 print("Test: Total number of tokens:", sum([len(sent) for sent in true_labels]))
 print("Test: seqeval based results")
 print(seqeval.metrics.classification_report(true_labels, true_predictions, digits=4, mode='strict',
-    scheme=IOB2))
-print("#"*100)
+                                            scheme=IOB2))
+print("#" * 100)

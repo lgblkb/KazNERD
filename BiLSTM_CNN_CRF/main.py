@@ -6,7 +6,7 @@
 
 """
     FILE :  main_hyperparams.py.py
-    FUNCTION : main
+    FUNCTION : main.py
 """
 import pdb
 import argparse
@@ -65,7 +65,7 @@ def start_test(train_iter, dev_iter, test_iter, model, alphabet, config):
 
 def main():
     """
-    main()
+    main.py()
     :return:
     """
     # save file

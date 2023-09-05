@@ -65,4 +65,4 @@ ENV ENV_NAME='kaznerd'
 
 RUN eval "$(micromamba shell hook --shell=bash)" &&\
     micromamba activate kaznerd &&\
-    pip install fastapi<0.100 loguru python-dotenv uvicorn[standard]
+    pip install "fastapi<0.100" loguru python-dotenv uvicorn[standard]

@@ -42,6 +42,7 @@ def get_labels(text: str):
     tokenized_inputs = tokenizer(text, return_tensors="pt")
     # Predict
     output = model(**tokenized_inputs)
+    logger.debug("output: {}", output)
     predictions = np.argmax(output.logits.detach().numpy(), axis=2)
     labels = convert_ids_to_name(tokenized_inputs, predictions)
     return labels

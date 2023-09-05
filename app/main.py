@@ -40,6 +40,8 @@ response_example = {
 
 def get_labels(text: str):
     tokenized_inputs = tokenizer(text, return_tensors="pt")
+    logger.debug("tokenized_inputs: {}", tokenized_inputs)
+
     # Predict
     output, = model(**tokenized_inputs)
     logger.debug("output.shape: {}", output.shape)

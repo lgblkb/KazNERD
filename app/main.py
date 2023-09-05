@@ -4,7 +4,7 @@ from typing import List
 import numpy as np
 from fastapi import FastAPI
 from loguru import logger
-from pydantic.v1 import conlist, BaseModel
+from pydantic import BaseModel
 
 from app.utils import tokenizer, model, convert_ids_to_name
 
@@ -12,7 +12,7 @@ app = FastAPI()
 
 
 class RecognizedEntities(BaseModel):
-    word_label_pairs: List[conlist(str, min_items=2, max_items=2)]
+    word_label_pairs: List[str]
 
 
 response_example = {

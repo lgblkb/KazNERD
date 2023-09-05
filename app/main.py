@@ -4,8 +4,7 @@ from typing import List
 import numpy as np
 from fastapi import FastAPI
 from loguru import logger
-from pydantic import BaseModel
-from pydantic.v1 import conlist
+from pydantic.v1 import conlist, BaseModel
 
 from app.utils import tokenizer, model, convert_ids_to_name
 

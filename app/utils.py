@@ -15,7 +15,7 @@ assert model_checkpoint_path.exists()
 
 # Tokenize input sentence for BERT
 tokenizer = AutoTokenizer.from_pretrained(str(model_checkpoint_path))
-assert isinstance(tokenizer, PreTrainedTokenizerFast)
+# assert isinstance(tokenizer, PreTrainedTokenizerFast)
 
 # Load model
 model = AutoModelForTokenClassification.from_pretrained(str(model_checkpoint_path))

@@ -4,11 +4,13 @@ from pathlib import Path
 from dotenv import load_dotenv
 from transformers import AutoTokenizer, AutoModelForTokenClassification, PreTrainedTokenizerFast
 
-load_dotenv()
-storage_path = Path(os.environ['STORAGE_FOLDER'])
-assert storage_path.exists()
+from settings import settings
 
-model_checkpoint_path = storage_path / 'bert-base-multilingual-cased-finetuned-ner-9,10,11,13,14' / 'checkpoint-1128'
+load_dotenv()
+# storage_path = Path(os.environ['STORAGE_DIR'])
+# assert storage_path.exists()
+
+model_checkpoint_path = settings.storage_folder / 'bert-base-multilingual-cased-finetuned-ner-9,10,11,13,14' / 'checkpoint-1128'
 assert model_checkpoint_path.exists()
 
 # Tokenize input sentence for BERT

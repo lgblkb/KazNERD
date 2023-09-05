@@ -43,8 +43,8 @@ def get_labels(text: str):
     logger.debug("tokenized_inputs: {}", tokenized_inputs)
 
     # Predict
-    output, = model(**tokenized_inputs)
-    logger.debug("output.shape: {}", output.shape)
+    output = model(**tokenized_inputs)
+    # logger.debug("output.shape: {}", output.shape)
     predictions = np.argmax(output.logits.detach().numpy(), axis=2)
     labels = convert_ids_to_name(tokenized_inputs, predictions)
     return labels

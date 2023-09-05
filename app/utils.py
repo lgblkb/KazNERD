@@ -10,7 +10,7 @@ assert model_checkpoint_path.exists()
 tokenizer = AutoTokenizer.from_pretrained(str(model_checkpoint_path))
 if not isinstance(tokenizer, PreTrainedTokenizerFast):
     logger.debug("type(tokenizer): {}", type(tokenizer))
-    raise NotImplementedError()
+    # raise NotImplementedError()
 
 # Load model
 model = AutoModelForTokenClassification.from_pretrained(str(model_checkpoint_path))

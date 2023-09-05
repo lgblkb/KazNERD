@@ -1,3 +1,4 @@
+from loguru import logger
 from transformers import AutoTokenizer, AutoModelForTokenClassification, PreTrainedTokenizerFast
 
 from settings import settings
@@ -7,7 +8,9 @@ assert model_checkpoint_path.exists()
 
 # Tokenize input sentence for BERT
 tokenizer = AutoTokenizer.from_pretrained(str(model_checkpoint_path))
-assert isinstance(tokenizer, PreTrainedTokenizerFast)
+if not isinstance(tokenizer, PreTrainedTokenizerFast):
+    logger.debug("type(tokenizer): {}", type(tokenizer))
+    raise NotImplementedError()
 
 # Load model
 model = AutoModelForTokenClassification.from_pretrained(str(model_checkpoint_path))

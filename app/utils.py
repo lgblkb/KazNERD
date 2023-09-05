@@ -14,11 +14,11 @@ model_checkpoint_path = settings.storage_folder / 'bert-base-multilingual-cased-
 assert model_checkpoint_path.exists()
 
 # Tokenize input sentence for BERT
-tokenizer = AutoTokenizer.from_pretrained(model_checkpoint_path)
+tokenizer = AutoTokenizer.from_pretrained(str(model_checkpoint_path))
 assert isinstance(tokenizer, PreTrainedTokenizerFast)
 
 # Load model
-model = AutoModelForTokenClassification.from_pretrained(model_checkpoint_path)
+model = AutoModelForTokenClassification.from_pretrained(str(model_checkpoint_path))
 
 labels_info = {0: "O", 1: "B-ADAGE", 2: "I-ADAGE", 3: "B-ART", 4: "I-ART", 5: "B-CARDINAL",
                6: "I-CARDINAL", 7: "B-CONTACT", 8: "I-CONTACT", 9: "B-DATE", 10: "I-DATE", 11: "B-DISEASE",

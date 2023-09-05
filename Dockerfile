@@ -4,7 +4,7 @@ FROM mambaorg/micromamba:0.25.1 as micromamba
 
 # This is the image we are going add micromaba to:
 ARG NVIDIA_CUDA_TAG
-FROM nvidia/cuda:${NVIDIA_CUDA_TAG} as base
+FROM nvidia/cudagl:${NVIDIA_CUDA_TAG} as base
 
 ARG USERNAME
 ARG USER_ID

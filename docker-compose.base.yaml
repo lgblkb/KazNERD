@@ -1,0 +1,25 @@
+x-env_params: &env_params
+  STORAGE_DIR: &STORAGE_DIR /storage
+  PROJECT_DIR: &PROJECT_DIR /project
+
+  TZ: 'Asia/Almaty'
+
+
+x-default: &default
+  build: .
+  volumes:
+    - { type: bind, source: "${PROJECT_DIR}", target: *PROJECT_DIR }
+    - { type: bind, source: "${STORAGE_DIR}", target: *STORAGE_DIR }
+  shm_size: "12gb"
+  working_dir: *PROJECT_DIR
+  environment:
+    <<: *env_params
+  restart: always
+
+services:
+  app:
+    <<: *default
+    command: uvicorn app.main:app --reload --host 0.0.0.0
+    ports:
+      - "8369:8000"
+volumes: { }

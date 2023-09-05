@@ -1,0 +1,1 @@
+./spin.sh logs -f --tail 200 "$@"

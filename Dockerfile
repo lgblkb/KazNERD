@@ -57,7 +57,7 @@ RUN micromamba create --name kaznerd python=3.8 -c conda-forge && \
     micromamba install -c anaconda numpy &&\
     micromamba install -c conda-forge seqeval &&\
     pip install torch==1.7.1+cu101 torchvision==0.8.2+cu101 torchaudio==0.7.2 -f https://download.pytorch.org/whl/torch_stable.html &&\
-    pip install transformers &&\
+    pip install transformers==4.22.2 &&\
     pip install datasets &&\
     micromamba clean --all --yes
 
